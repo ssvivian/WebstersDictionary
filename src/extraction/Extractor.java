@@ -135,7 +135,7 @@ public class Extractor {
 				}
 			}
 			
-			if (line.matches("^[A-Z\\s\\d-_;']+$")){ // a new word	
+			if (line.matches("^[A-Z]+[A-Z\\s\\d-_;']*$")){ // a new word	
 				// save last entry
 				if (defs.size() > 0){
 					save (currentWord, currentPos, (Vector<String>)defs.clone(), currentSyns);
@@ -155,7 +155,7 @@ public class Extractor {
 			if (line.matches(defPattern2)){ // a new definition, pattern 2
 				line = line.replaceFirst("\\d+\\.\\s", "");
 				
-				if (!line.startsWith("(") && !line.startsWith("pl. (") && !line.startsWith("Etym:")){
+				if (!line.startsWith("(") && !line.startsWith("pl. (") && !line.equals("pl.") && !line.startsWith("Etym:")){
 					currentDef = line;
 					readingDef = true;
 				}
@@ -164,7 +164,7 @@ public class Extractor {
 			if (line.matches(defPattern3)){ // a new definition, pattern 3				
 				line = line.replaceFirst("\\s?\\(.\\)\\s", "");
 				
-				if (!line.startsWith("Etym:")){
+				if (!line.startsWith("(") && !line.startsWith("Etym:") && !line.equals("pl.")){
 					currentDef = line;
 					readingDef = true;
 				}
@@ -184,7 +184,7 @@ public class Extractor {
 	
 	public static void main (String[] args){
 		
-		getDefinitions("dictionary.txt", "dictionary.json");	
+		getDefinitions("dictionary.txt", "dictionary.json");
 	
 	}
 
