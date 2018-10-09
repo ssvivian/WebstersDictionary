@@ -1,10 +1,14 @@
 package extraction;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,16 +26,20 @@ public class Extractor {
 		List<String> lines = new ArrayList<String>();
     	
     	try{
-			BufferedReader br = new BufferedReader(new FileReader(inputfile));
-			try{
-				String line = null;
-			
-				while ((line = br.readLine()) != null) {
-					lines.add(line);
+    		try{
+	    		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile), "UTF8"));
+				try{
+					String line = null;
+				
+					while ((line = br.readLine()) != null) {
+						lines.add(line);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+    		} catch (UnsupportedEncodingException u){
+    			u.printStackTrace();
+    		}
 		} catch (FileNotFoundException f){
 			f.printStackTrace();
 		}
@@ -77,7 +85,7 @@ public class Extractor {
 		String dictionary = dict.toString();
 		
 		try {
-	        FileWriter writer = new FileWriter(outputfile);
+			OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outputfile), StandardCharsets.UTF_8);
 	        writer.write(dictionary);
 	        writer.flush();
 	        writer.close();
